@@ -1,15 +1,19 @@
 package takemewith.io.takemewith;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.eddystone.Eddystone;
 
 import java.util.List;
 
 import takemewith.io.takemewith.utils.UserPreferences;
+
+import static takemewith.io.takemewith.TakeMeWith.TAG;
 
 public class TakemeWithApplication extends Application {
 
@@ -50,6 +54,16 @@ public class TakemeWithApplication extends Application {
                 // could add an "exit" notification too if you want (-:
                 if (region.equals(BeaconsData.ROOM_REGION)) {
                     Toast.makeText(getApplicationContext(), "House exited", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        beaconManager.setEddystoneListener(new BeaconManager.EddystoneListener() {
+            @Override
+            public void onEddystonesFound(List<Eddystone> list) {
+                for (Eddystone e : list) {
+                    double temperature = e.telemetry.temperature;
+                    Log.d(TAG,".onEddystonesFound() - temperature is "+temperature);
                 }
             }
         });
