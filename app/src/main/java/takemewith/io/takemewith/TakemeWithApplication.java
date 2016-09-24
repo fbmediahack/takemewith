@@ -26,10 +26,8 @@ public class TakemeWithApplication extends Application {
         mMonitoringListener = new HouseMonitoringListener(getApplicationContext());
 
         mBeaconManager = new BeaconManager(getApplicationContext());
-        mBeaconManager.setBackgroundScanPeriod(30000, 1000);
-        mBeaconManager.setForegroundScanPeriod(30000, 1000);
 
-        mBeaconManager.setRangingListener(new SirenPlayingRangeListener(
+        mBeaconManager.setRangingListener(new RangeListener(
                 new SirenPlayer(getApplicationContext()),
                 BeaconsData.TAG_BEACON_REGION.getIdentifier()));
 
@@ -40,7 +38,12 @@ public class TakemeWithApplication extends Application {
             public void onServiceReady() {
                 // Start monitoring regions
                 mBeaconManager.startRanging(BeaconsData.TAG_BEACON_REGION);
-                mBeaconManager.startMonitoring(BeaconsData.ROOM_REGION);
+                // For demo purposes we'll range the beacon instead of monitor it.
+                // This is because the range of the monitoring is just too big, so
+                // we'll detect when the phone is at more than 3 metres from the beacon as a
+                // "leave the house simulation"
+//                mBeaconManager.startMonitoring(BeaconsData.ROOM_REGION);
+                mBeaconManager.startRanging(BeaconsData.ROOM_REGION);
                 mBeaconManager.startEddystoneScanning();
             }
         });
