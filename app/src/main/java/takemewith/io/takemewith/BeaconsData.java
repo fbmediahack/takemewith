@@ -23,7 +23,7 @@ public final class BeaconsData {
     public static final Integer HOUSE_BEACON_PURPLE_MINOR = 56498;
 
     public static final Region ROOM_REGION = new Region("House Room", HOUSE_BEACONS_UUID,
-            null, null);
+            18713, 56498);
 
 
     public static final Region TAG_BEACON_REGION = new Region ("TagBeacon",
