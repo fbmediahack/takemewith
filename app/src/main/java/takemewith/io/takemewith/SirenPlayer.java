@@ -19,6 +19,7 @@ public class SirenPlayer implements TextToSpeech.OnInitListener {
     private final Runnable mMsgRunnable;
     private final Handler mHandler;
 
+    private boolean mIsPlaying;
     private boolean mIsReady;
 
     public SirenPlayer(Context context) {
@@ -38,12 +39,18 @@ public class SirenPlayer implements TextToSpeech.OnInitListener {
         if (mIsReady) {
             mHandler.removeCallbacks(mMsgRunnable);
             mHandler.post(mMsgRunnable);
+            mIsPlaying = true;
         }
     }
 
     public void pause() {
         mHandler.removeCallbacks(mMsgRunnable);
         mTextToSpeech.stop();
+        mIsPlaying = false;
+    }
+
+    public boolean isPlaying() {
+        return mIsPlaying;
     }
 
     public void shutDown() {

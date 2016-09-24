@@ -33,8 +33,13 @@ public class TakemeWithApplication extends Application {
                 // Start monitoring regions
                 beaconManager.startMonitoring(BeaconsData.ROOM1_REGION);
                 beaconManager.startMonitoring(BeaconsData.ROOM2_REGION);
+                beaconManager.startRanging(BeaconsData.TAG_BEACON_REGION);
             }
         }));
+
+        beaconManager.setRangingListener(new SirenPlayingRangeListener(
+                new SirenPlayer(getApplicationContext()),
+                BeaconsData.TAG_BEACON_REGION.getIdentifier()));
 
         // SAMPLE LISTENER FOR THE REGIONS
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
