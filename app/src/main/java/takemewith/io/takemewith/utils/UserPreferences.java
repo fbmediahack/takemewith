@@ -16,9 +16,13 @@ public class UserPreferences {
 
     private static final String PREF_NAME          = "io.takemewith.NAME";
 
+    private static final String PREF_NUMBER        = "io.takemewith.NUMBER";
+
     private static UserPreferences sInstance;
 
     private String mName;
+
+    private String mNumber;
 
     public static UserPreferences init(Context context) {
         sInstance = new UserPreferences(context);
@@ -45,6 +49,7 @@ public class UserPreferences {
 
     private void onReadConfiguration(SharedPreferences prefs) {
         mName = prefs.getString(PREF_NAME, null);
+        mNumber = prefs.getString(PREF_NUMBER, null);
     }
 
     private void onSaveConfiguration(SharedPreferences.Editor editor) {
@@ -100,4 +105,12 @@ public class UserPreferences {
         return this;
     }
 
+    public UserPreferences setEmergencyNumber(String number) {
+        mNumber = number;
+        return this;
+    }
+
+    public String getEmergencyNumber() {
+        return mNumber;
+    }
 }

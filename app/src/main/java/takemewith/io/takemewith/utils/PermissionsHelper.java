@@ -27,19 +27,24 @@ public class PermissionsHelper {
     private static final String TAG = PermissionsHelper.class.getSimpleName();
 
     public static boolean hasPermissions(Activity activity) {
-        boolean hasAudioPermissions = (ActivityCompat
+        boolean hasLocationPermissions = (ActivityCompat
                 .checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
-        boolean hasCameraPermissions =(ActivityCompat
+        boolean hasBluetoothPermissions =(ActivityCompat
                 .checkSelfPermission(activity, Manifest.permission.BLUETOOTH)
                 == PackageManager.PERMISSION_GRANTED);
+        boolean hasSmsPermission = (ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED);
 
         List<String> permissions = new ArrayList<>();
-        if (!hasAudioPermissions) {
+        if (!hasLocationPermissions) {
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
-        if (!hasCameraPermissions) {
+        if (!hasBluetoothPermissions) {
             permissions.add(Manifest.permission.BLUETOOTH);
+        }
+        if (!hasSmsPermission) {
+            permissions.add(Manifest.permission.SEND_SMS);
         }
         if (!permissions.isEmpty()) {
             String[] params = permissions.toArray(new String[permissions.size()]);

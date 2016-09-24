@@ -1,14 +1,17 @@
 package takemewith.io.takemewith;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 import takemewith.io.takemewith.utils.PermissionsHelper;
+import takemewith.io.takemewith.utils.UserPreferences;
 
 /**
  * Created by Vladimir Kislicins on 24/09/2016.
@@ -42,5 +45,14 @@ public class TakeMeWith extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         PermissionsHelper.hasPermissions(this);
+    }
+
+    public void sendEmergencySMS() {
+        String number = UserPreferences.get().getEmergencyNumber();
+        String name = UserPreferences.get().getName();
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(number, null, String.format("%s has left the building!!", name),
+                null,
+                null);
     }
 }
