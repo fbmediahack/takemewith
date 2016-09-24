@@ -131,6 +131,6 @@ public class UserPreferences {
     }
 
     public boolean isConfigCompleted() {
-        return TextUtils.isEmpty(mNumber) && TextUtils.isEmpty(mName);
+        return !TextUtils.isEmpty(mNumber) && !TextUtils.isEmpty(mName);
     }
 }

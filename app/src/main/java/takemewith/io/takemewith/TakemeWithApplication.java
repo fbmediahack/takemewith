@@ -51,15 +51,17 @@ public class TakemeWithApplication extends Application {
         mBeaconManager.setEddystoneListener(new BeaconManager.EddystoneListener() {
             @Override
             public void onEddystonesFound(List<Eddystone> list) {
-                Log.d(TAG,".onEddystonesFound() - entered - count "+list.size());
+                //Log.d(TAG,".onEddystonesFound() - entered - count "+list.size());
                 for (Eddystone e : list) {
-                    double temperature = e.telemetry.temperature;
-                    Log.d(TAG,".onEddystonesFound() - temperature is "+temperature);
-                    if (temperature < UserPreferences.get().getLowTempLimit()
-                            || temperature > UserPreferences.get().getHighTempLimit()) {
-                        SmsSender.sendSms(
-                                String.format("Warning! Unexpected temperature detected: %d",
-                                        (int) temperature));
+                    if (e.telemetry != null) {
+                        double temperature = e.telemetry.temperature;
+                        // Log.d(TAG,".onEddystonesFound() - temperature is "+temperature);
+                        if (temperature < UserPreferences.get().getLowTempLimit()
+                                || temperature > UserPreferences.get().getHighTempLimit()) {
+                            SmsSender.sendSms(
+                                    String.format("Warning! Unexpected temperature detected: %d",
+                                            (int) temperature));
+                        }
                     }
                 }
             }

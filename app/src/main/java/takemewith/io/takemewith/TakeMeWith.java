@@ -26,7 +26,7 @@ public class TakeMeWith extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
         if (permissions.length == 0 && grantResults.length == 0) {
-            Log.d(TAG, ".onRequestPermissionsResult() - interrupted");
+            //Log.d(TAG, ".onRequestPermissionsResult() - interrupted");
             return;
         }
         switch (requestCode) {

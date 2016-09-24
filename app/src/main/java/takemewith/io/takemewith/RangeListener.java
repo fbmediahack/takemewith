@@ -1,5 +1,7 @@
 package takemewith.io.takemewith;
 
+import android.util.Log;
+
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
@@ -14,6 +16,7 @@ import takemewith.io.takemewith.utils.UserPreferences;
 public class RangeListener implements BeaconManager.RangingListener {
 
     private static final int SIGNAL_THRESHOLD = -60;
+    private static final int HOUSE_SIGNAL_THRESHOLD = -70;
     private static final int SMSTHRESHOLD_MILLIS = 1 * 60 * 1000;
     private final String mTargetRegion;
     private final SirenPlayer mPlayer;
@@ -27,18 +30,15 @@ public class RangeListener implements BeaconManager.RangingListener {
     @Override
     public void onBeaconsDiscovered(Region region, List<Beacon> list) {
 
-        if (UserPreferences.get().getEmergencyNumber() == null)  {
-            return;
-        }
-
         if (BeaconsData.TAG_BEACON_REGION.getIdentifier().equals(region.getIdentifier())) {
+
             if (!list.isEmpty() && list.get(0).getRssi() < SIGNAL_THRESHOLD && !mPlayer.isPlaying()) {
                 mPlayer.play();
             } else {
                 mPlayer.pause();
             }
         } else if (BeaconsData.ROOM_REGION.getIdentifier().equals(region.getIdentifier())) {
-
+            Log.d("RangeListener", "ROOM REGION DETECTED, list size: " + list.size());
             final UUID closestUUID = region.getProximityUUID();
             Beacon closestBeacon = null;
             for (Beacon beacon : list) {
@@ -46,15 +46,17 @@ public class RangeListener implements BeaconManager.RangingListener {
                     closestBeacon = beacon;
                 }
             }
-            if (closestBeacon != null) {
-                if ((Utils.computeProximity(closestBeacon).equals(Utils.Proximity.IMMEDIATE)
-                        || Utils.computeProximity(closestBeacon).equals(Utils.Proximity.FAR))
-                        && (lastMillis == 0
-                        || (lastMillis != 0
-                        && System.currentTimeMillis() - lastMillis > SMSTHRESHOLD_MILLIS))) {
-                    SmsSender.sendSms(
-                            String.format("%s has left the building!!", UserPreferences.get().getName()));
-                }
+            if (closestBeacon != null && closestBeacon.getRssi() < HOUSE_SIGNAL_THRESHOLD) {
+//                if (lastMillis == 0
+//                        || (lastMillis != 0
+//                        && System.currentTimeMillis() - lastMillis > SMSTHRESHOLD_MILLIS)) {
+                    Log.d("RangeListener", "SENDING SMS " + closestBeacon.getRssi());
+
+                    if (SmsSender.sendSms(
+                            String.format("%s has left the building!!", UserPreferences.get().getName()))){
+                        lastMillis = System.currentTimeMillis();
+                    }
+//                }
             }
         }
     }
