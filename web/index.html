@@ -19,9 +19,13 @@
     <div id="map"></div>
     <script>
       var map;
+      var marker;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15
+        });
+        marker = new google.maps.Marker({
+          map: map
         });
       }
       setInterval(() => {
@@ -33,9 +37,9 @@
         }, 3000);
 
         function setLocation(lat, lng) {
-            map.setCenter(
-                new google.maps.LatLng(lat, lng)
-            );
+          var location = new google.maps.LatLng(lat, lng);
+          map.setCenter(location);
+          marker.setPosition(location);
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoODEIx5ukGWWpWN996ustm17NgraIQnA&callback=initMap"
