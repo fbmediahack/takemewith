@@ -68,10 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_gravity="right|bottom|end"
-        android:layout_toEndOf="@+id/logo"
+        android:layout_alignParentRight="true"
         android:src="@drawable/ic_send_white_24dp"
         app:layout_anchorGravity="bottom|right|end"
         app:backgroundTint="@color/colorAccent" />
