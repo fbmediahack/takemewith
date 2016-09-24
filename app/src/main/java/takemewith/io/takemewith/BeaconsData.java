@@ -1,6 +1,8 @@
 package takemewith.io.takemewith;
 
 
+import com.estimote.sdk.Region;
+
 import java.util.UUID;
 
 public final class BeaconsData {
@@ -19,5 +21,14 @@ public final class BeaconsData {
             UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D");
     public static final Integer HOUSE_BEACON_PURPLE_MAJOR = 18713;
     public static final Integer HOUSE_BEACON_PURPLE_MINOR = 56498;
+
+    public static final Region ROOM1_REGION = new Region("Room1", HOUSE_BEACON_PINK,
+            HOUSE_BEACON_PINK_MAJOR, HOUSE_BEACON_PINK_MINOR);
+
+    public static final Region ROOM2_REGION = new Region("Room2", HOUSE_BEACON_PURPLE,
+            HOUSE_BEACON_PURPLE_MAJOR, HOUSE_BEACON_PURPLE_MINOR);
+
+    public static final Region TAG_BEACON_REGION = new Region ("TagBeacon",
+            TAG_BEACON, TAG_BEACON_MAJOR, TAG_BEACON_MINOR);
 
 }
