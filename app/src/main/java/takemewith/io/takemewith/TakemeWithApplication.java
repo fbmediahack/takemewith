@@ -32,6 +32,7 @@ public class TakemeWithApplication extends Application {
                 // Start monitoring regions
                 beaconManager.startRanging(BeaconsData.TAG_BEACON_REGION);
                 beaconManager.startMonitoring(BeaconsData.ROOM_REGION);
+                beaconManager.startEddystoneScanning();
             }
         }));
 
@@ -61,9 +62,14 @@ public class TakemeWithApplication extends Application {
         beaconManager.setEddystoneListener(new BeaconManager.EddystoneListener() {
             @Override
             public void onEddystonesFound(List<Eddystone> list) {
+                Log.d(TAG,".onEddystonesFound() - entered - count "+list.size());
                 for (Eddystone e : list) {
                     double temperature = e.telemetry.temperature;
                     Log.d(TAG,".onEddystonesFound() - temperature is "+temperature);
+                    if (temperature < UserPreferences.get().getLowTempLimit()
+                            || temperature > UserPreferences.get().getHighTempLimit()) {
+                        //TODO:sms
+                    }
                 }
             }
         });
