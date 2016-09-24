@@ -39,3 +39,7 @@ captures/
 # Keystore files
 *.jks
 .idea/libraries/
+
+
+#node
+node_modules/
