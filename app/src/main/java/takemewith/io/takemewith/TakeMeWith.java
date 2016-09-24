@@ -46,13 +46,4 @@ public class TakeMeWith extends AppCompatActivity {
         super.onResume();
         PermissionsHelper.hasPermissions(this);
     }
-
-    public void sendEmergencySMS() {
-        String number = UserPreferences.get().getEmergencyNumber();
-        String name = UserPreferences.get().getName();
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(number, null, String.format("%s has left the building!!", name),
-                null,
-                null);
-    }
 }

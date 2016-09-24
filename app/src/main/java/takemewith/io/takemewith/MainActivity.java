@@ -20,7 +20,7 @@ public class MainActivity extends TakeMeWith implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.sos_button) {
-            sendEmergencySMS();
+            SmsSender.sendSms();
         }
     }
 }
