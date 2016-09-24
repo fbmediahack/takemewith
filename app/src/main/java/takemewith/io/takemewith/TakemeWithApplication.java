@@ -56,7 +56,7 @@ public class TakemeWithApplication extends Application {
                             || temperature > UserPreferences.get().getHighTempLimit()) {
                         SmsSender.sendSms(
                                 String.format("Warning! Unexpected temperature detected: %d",
-                                        temperature));
+                                        (int) temperature));
                     }
                 }
             }
