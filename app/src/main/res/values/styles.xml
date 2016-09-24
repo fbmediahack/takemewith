@@ -16,7 +16,7 @@
     </style>
 
     <style name="TextInputLayout">
-        <item name="android:textColorHint">#999999</item>
+        <item name="android:textColorHint">#92ffffff</item>
     </style>
 
     <style name="EditTextTheme">
