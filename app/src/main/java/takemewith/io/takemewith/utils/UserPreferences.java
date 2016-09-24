@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -16,8 +17,8 @@ public class UserPreferences {
 
     private static final String PREF_NAME               = "io.takemewith.NAME";
     private static final String PREF_NUMBER             = "io.takemewith.NUMBER";
-    private static final String PREG_LOW_TEMP_LIMIT     = "io.takemewith.NAME";
-    private static final String PREG_HIGH_TEMP_LIMIT    = "io.takemewith.NUMBER";
+    private static final String PREF_LOW_TEMP_LIMIT     = "io.takemewith.LOW_TEMP_LIMIT";
+    private static final String PREF_HIGH_TEMP_LIMIT    = "io.takemewith.HIGH_TEMP_LIMIT";
 
     private static final int DEFAULT_LOW_TEMP_LIMIT     = 20;
     private static final int DEFAULT_HIGH_TEMP_LIMIT    = 30;
@@ -55,8 +56,8 @@ public class UserPreferences {
     private void onReadConfiguration(SharedPreferences prefs) {
         mName = prefs.getString(PREF_NAME, null);
         mNumber = prefs.getString(PREF_NUMBER, null);
-        mLowTempLimit = prefs.getInt(PREG_LOW_TEMP_LIMIT, DEFAULT_LOW_TEMP_LIMIT);
-        mHighTempLimit = prefs.getInt(PREG_HIGH_TEMP_LIMIT, DEFAULT_HIGH_TEMP_LIMIT);
+        mLowTempLimit = prefs.getInt(PREF_LOW_TEMP_LIMIT, DEFAULT_LOW_TEMP_LIMIT);
+        mHighTempLimit = prefs.getInt(PREF_HIGH_TEMP_LIMIT, DEFAULT_HIGH_TEMP_LIMIT);
     }
 
     private void onSaveConfiguration(SharedPreferences.Editor editor) {
@@ -127,5 +128,9 @@ public class UserPreferences {
 
     public double getHighTempLimit() {
         return mHighTempLimit;
+    }
+
+    public boolean isConfigCompleted() {
+        return TextUtils.isEmpty(mNumber) && TextUtils.isEmpty(mName);
     }
 }

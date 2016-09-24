@@ -1,65 +1,51 @@
 package takemewith.io.takemewith;
 
+import takemewith.io.takemewith.utils.UserPreferences;
+
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
-import com.estimote.sdk.Region;
 import com.estimote.sdk.eddystone.Eddystone;
 
 import java.util.List;
-
-import takemewith.io.takemewith.utils.UserPreferences;
 
 import static takemewith.io.takemewith.TakeMeWith.TAG;
 
 public class TakemeWithApplication extends Application {
 
-    private BeaconManager beaconManager;
+    private BeaconManager mBeaconManager;
+
+    private HouseMonitoringListener mMonitoringListener;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         UserPreferences.init(getApplicationContext());
-        beaconManager = new BeaconManager(getApplicationContext());
+        mMonitoringListener = new HouseMonitoringListener(getApplicationContext());
 
-        beaconManager.connect((new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                // Start monitoring regions
-                beaconManager.startRanging(BeaconsData.TAG_BEACON_REGION);
-                beaconManager.startMonitoring(BeaconsData.ROOM_REGION);
-                beaconManager.startEddystoneScanning();
-            }
-        }));
+        mBeaconManager = new BeaconManager(getApplicationContext());
+        mBeaconManager.setBackgroundScanPeriod(30000, 1000);
+        mBeaconManager.setForegroundScanPeriod(30000, 1000);
 
-        beaconManager.setRangingListener(new SirenPlayingRangeListener(
+        mBeaconManager.setRangingListener(new SirenPlayingRangeListener(
                 new SirenPlayer(getApplicationContext()),
                 BeaconsData.TAG_BEACON_REGION.getIdentifier()));
 
-        // SAMPLE LISTENER FOR THE REGIONS
-        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+        mBeaconManager.setMonitoringListener(mMonitoringListener);
 
-            //Sample listener
+        mBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
-            public void onEnteredRegion(Region region, List<Beacon> list) {
-                if (region.equals(BeaconsData.ROOM_REGION)) {
-                    Toast.makeText(getApplicationContext(), "House entered", Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onExitedRegion(Region region) {
-                // could add an "exit" notification too if you want (-:
-                if (region.equals(BeaconsData.ROOM_REGION)) {
-                    Toast.makeText(getApplicationContext(), "House exited", Toast.LENGTH_LONG).show();
-                }
+            public void onServiceReady() {
+                // Start monitoring regions
+                mBeaconManager.startRanging(BeaconsData.TAG_BEACON_REGION);
+                mBeaconManager.startMonitoring(BeaconsData.ROOM_REGION);
+                mBeaconManager.startEddystoneScanning();
             }
         });
 
-        beaconManager.setEddystoneListener(new BeaconManager.EddystoneListener() {
+        mBeaconManager.setEddystoneListener(new BeaconManager.EddystoneListener() {
             @Override
             public void onEddystonesFound(List<Eddystone> list) {
                 Log.d(TAG,".onEddystonesFound() - entered - count "+list.size());
@@ -68,11 +54,12 @@ public class TakemeWithApplication extends Application {
                     Log.d(TAG,".onEddystonesFound() - temperature is "+temperature);
                     if (temperature < UserPreferences.get().getLowTempLimit()
                             || temperature > UserPreferences.get().getHighTempLimit()) {
-                        //TODO:sms
+                        SmsSender.sendSms(
+                                String.format("Warning! Unexpected temperature detected: %d",
+                                        temperature));
                     }
                 }
             }
         });
     }
-
 }

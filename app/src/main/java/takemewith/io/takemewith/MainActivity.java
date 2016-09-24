@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
+import takemewith.io.takemewith.utils.UserPreferences;
+
 public class MainActivity extends TakeMeWith implements View.OnClickListener {
 
     private FloatingActionButton mFab;
@@ -20,7 +22,8 @@ public class MainActivity extends TakeMeWith implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.sos_button) {
-            sendEmergencySMS();
+            SmsSender.sendSms(
+                    String.format("%s has left the building!!", UserPreferences.get().getName()));
         }
     }
 }

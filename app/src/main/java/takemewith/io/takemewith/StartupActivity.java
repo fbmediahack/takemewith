@@ -34,7 +34,7 @@ public class StartupActivity extends TakeMeWith implements View.OnClickListener 
     protected void onResume() {
         super.onResume();
 
-        if (!TextUtils.isEmpty(UserPreferences.get().getName())) {
+        if (UserPreferences.get().isConfigCompleted()) {
             startMain();
         }
     }
